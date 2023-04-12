@@ -3,8 +3,8 @@
 
 int main()
 {
-	string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
-//	string board = "##########K###############################R#############r#r#####";
+	//string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
+	string board = "##########K###############################R#############r#r#####";
 	Chess a(board);
 	int codeResponse = 0;
 	string res = a.getInput();
