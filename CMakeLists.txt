@@ -17,7 +17,7 @@ if (MSVC)
     add_compile_options (/W4 /permissive- /Zc:externConstexpr /Zc:inline)
 endif ()
 
-add_executable (${CMAKE_PROJECT_NAME} src/main.cpp)
+add_executable (${CMAKE_PROJECT_NAME})
 
 
 add_subdirectory (include)
