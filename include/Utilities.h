@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -14,6 +15,13 @@ using std::vector;
 using std::make_unique;
 using std::move;
 
+class Piece;
+
+using board_vec = vector<vector<unique_ptr<Piece>>>;
+using board_vec_const = const vector<vector<unique_ptr<Piece>>>;
+
+using board_vec_ref = vector<vector<unique_ptr<Piece>>>&;
+using board_vec_const_ref = const vector<vector<unique_ptr<Piece>>>&;
 
 const int BOARD_SIZE = 8;
 

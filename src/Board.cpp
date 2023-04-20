@@ -71,11 +71,11 @@ int Board::getResponse(const std::string& input) {
 	if (typeid(*m_board[dst.x][dst.y]) == typeid(King))
 		setKingPos({ dst.x, dst.y }, m_board[dst.x][dst.y]->getColor());
 
-
 	return ValidMove;
 }
 
 
+// Check if the destination is occupied by the same color of the current player
 bool Board::isOccupiedBySameColor(const Pos& pos) const
 {
 	if (isEmpty(pos))
@@ -84,30 +84,45 @@ bool Board::isOccupiedBySameColor(const Pos& pos) const
 }
 
 
-// TODO : finish implementation
+// Check if the move is legal
 bool Board::isLegalMove(const Pos& src, const Pos& dst) const
 {
-	return m_board[src.x][src.y]->isValidMove(src, dst);
+	board_vec_const_ref board = m_board;
+	return m_board[src.x][src.y]->isValidMove(src, dst, board);
 }
 
 
+// Execute the move
 void Board::executeMove(const Pos& src, const Pos& dst)
 {
-	//unique_ptr<Piece> destPtr = move(m_board[dst.x][dst.y]);
-	
 	// move the piece
 	m_board[dst.x][dst.y] = move(m_board[src.x][src.y]);
 	m_board[src.x][src.y] = nullptr;
 }
 
 
-bool Board::isCheck(const bool&) const
+// Check if the player caused himself check
+bool Board::isCheck(const bool& color) const
 {
-	// TODO : finish implementation
+	board_vec_const_ref board = m_board;
+	Pos kingPos = color ? _w_king_pos : _b_king_pos;
+
+	// Check if any of the opponent's pieces can attack the king
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			if (m_board[i][j] != nullptr && m_board[i][j]->getColor() != color) {
+				if (m_board[i][j]->isValidMove(Pos(i, j), kingPos, board)) {
+					return true;
+				}
+			}
+		}
+	}
+
 	return false;
 }
 
 
+// Undo the move
 void Board::undoMove(const Pos& src, const Pos& dst)
 {
 	m_board[src.x][src.y] = move(m_board[dst.x][dst.y]);

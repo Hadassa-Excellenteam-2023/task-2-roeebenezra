@@ -30,7 +30,7 @@ public:
 
 private:
 	bool _whith_turn;
-	vector<vector<unique_ptr<Piece>>> m_board;
+	board_vec m_board;
 	Pos _w_king_pos;
 	Pos _b_king_pos;
 };
