@@ -1,18 +1,17 @@
-#include "../include/Pieces/Bishop.h"
+#include "Pieces/Bishop.h"
 
 
-bool Bishop::m_registerItWhite = Factory<Piece>::registerit('B', []() -> std::unique_ptr<Piece> {
+bool Bishop::m_registerItWhite = Factory<Piece>::registerit('B', []() -> unique_ptr<Piece> {
     return make_unique<Bishop>(true);
     });
 
 
-bool Bishop::m_registerItBlack = Factory<Piece>::registerit('b', []() -> std::unique_ptr<Piece> {
+bool Bishop::m_registerItBlack = Factory<Piece>::registerit('b', []() -> unique_ptr<Piece> {
     return make_unique<Bishop>(false);
     });
 
 
-
-bool Bishop::isValidMove(const Pos& src, const Pos& dst, board_vec_const_ref board) {
+bool Bishop::isValidMove(const Pos& src, const Pos& dst, const board_vec_t& board) {
     // Check if the move is diagonal
     int deltaRow = abs(dst.x - src.x);
     int deltaCol = abs(dst.y - src.y);

@@ -1,18 +1,18 @@
-#include "../include/Pieces/Queen.h"
+#include "Pieces/Queen.h"
 
 
-bool Queen::m_registerItWhite = Factory<Piece>::registerit('Q', []() -> std::unique_ptr<Piece> {
+bool Queen::m_registerItWhite = Factory<Piece>::registerit('Q', []() -> unique_ptr<Piece> {
     return make_unique<Queen>(true);
     });
 
 
-bool Queen::m_registerItBlack = Factory<Piece>::registerit('q', []() -> std::unique_ptr<Piece> {
+bool Queen::m_registerItBlack = Factory<Piece>::registerit('q', []() -> unique_ptr<Piece> {
     return make_unique<Queen>(false);
     });
 
 
 
-bool Queen::isValidMove(const Pos& src, const Pos& dst, board_vec_const_ref board) {
+bool Queen::isValidMove(const Pos& src, const Pos& dst, const board_vec_t& board) {
     // Check if the move is horizontal, vertical, or diagonal
     int deltaRow = abs(dst.x - src.x);
     int deltaCol = abs(dst.y - src.y);

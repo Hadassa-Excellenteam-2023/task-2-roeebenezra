@@ -1,20 +1,20 @@
-#include "../include/Pieces/King.h"
+#include "Pieces/King.h"
 
 
 // White king
-bool King::m_registerItWhite = Factory<Piece>::registerit('K', []() -> std::unique_ptr<Piece> {
+bool King::m_registerItWhite = Factory<Piece>::registerit('K', []() -> unique_ptr<Piece> {
     return make_unique<King>(true);
     });
 
 
 // Black king
-bool King::m_registerItBlack = Factory<Piece>::registerit('k', []() -> std::unique_ptr<Piece> {
+bool King::m_registerItBlack = Factory<Piece>::registerit('k', []() -> unique_ptr<Piece> {
     return make_unique<King>(false);
     });
 
 
 // Check if the move is valid
-bool King::isValidMove(const Pos& src, const Pos& dst, board_vec_const_ref board) {
+bool King::isValidMove(const Pos& src, const Pos& dst, const board_vec_t& board) {
     // Check if the destination is adjacent to the source position
     if (abs(dst.x - src.x) > 1 || abs(dst.y - src.y) > 1) {
         return false;

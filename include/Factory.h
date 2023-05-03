@@ -9,32 +9,25 @@ class Piece;
 template<typename T>
 class Factory {
 public:
-	using pFnc = unique_ptr<T>(*)();
+    using creationFunc = unique_ptr<T>(*)();
 
-	static bool registerit(const char& name, pFnc);
-	
-	static unique_ptr<T> create(const char& name);
+    static bool registerit(const char& name, creationFunc f) {
+        getMap().emplace(name, f);
+        return true;
+    }
+
+    static unique_ptr<T> create(const char& name) {
+        auto map = getMap();
+        auto it = map.find(name);
+        if (it == map.end())
+            return nullptr;
+
+        return it->second();
+    }
 
 private:
-	static auto& getMap() {
-		static map<char, pFnc> map;
-		return map;
-	}
+    static auto& getMap() {
+        static map<char, creationFunc> map;
+        return map;
+    }
 };
-
-
-template<typename T>
-bool Factory<T>::registerit(const char& name, pFnc f) {
-	Factory::getMap().emplace(name, f);
-	return true;
-}
-
-
-template<typename T>
-unique_ptr<T> Factory<T>::create(const char& name) {
-	auto it = Factory::getMap().find(name);
-	if (it == Factory::getMap().end())
-		return nullptr;
-
-	return it->second();
-}

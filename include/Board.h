@@ -10,11 +10,11 @@ public:
 
 	void init(const string&);
 
-	int getResponse(const std::string&);
+	int getResponse(const string&);
 
 	bool isEmpty(const Pos& pos) const { return m_board[pos.x][pos.y] == nullptr; }
 	
-	bool isOccupiedByOpponent(const Pos& pos) const { return m_board[pos.x][pos.y]->getColor() != _whith_turn; }
+	bool isOccupiedByOpponent(const Pos& pos) const { return m_board[pos.x][pos.y]->getColor() != m_whith_turn; }
 	
 	bool isOccupiedBySameColor(const Pos& pos) const;
 	
@@ -26,11 +26,11 @@ public:
 	
 	void undoMove(const Pos&, const Pos&);
 
-	void setKingPos(const Pos& pos, const bool& color) { color ? _w_king_pos = pos : _b_king_pos = pos; }
+	void setKingPos(Pos pos, const bool& color) { color ? m_w_king_pos = pos : m_b_king_pos = pos; }
 
 private:
-	bool _whith_turn;
-	board_vec m_board;
-	Pos _w_king_pos;
-	Pos _b_king_pos;
+	bool m_whith_turn;
+	board_vec_t m_board;
+	Pos m_w_king_pos;
+	Pos m_b_king_pos;
 };

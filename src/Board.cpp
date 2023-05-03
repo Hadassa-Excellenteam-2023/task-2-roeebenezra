@@ -19,14 +19,13 @@ void Board::init(const string& start)
 		m_board.push_back(move(row));
 	}	
 
-	_whith_turn = true;
-	_w_king_pos = { 0, 4 };
-	_b_king_pos = { 7, 4 };
+	m_whith_turn = true;
+	m_w_king_pos = { 0, 4 };
+	m_b_king_pos = { 7, 4 };
 }
 
 
 int Board::getResponse(const std::string& input) {
-
 	// parse the input string
 	Pos src = { input[0] - 'a', input[1] - '1' };
 	Pos dst = { input[2] - 'a', input[3] - '1' };
@@ -51,25 +50,29 @@ int Board::getResponse(const std::string& input) {
 		return ErrorCode::InvalidMove;
 	}
 
+	// save the piece in the destination
+	unique_ptr<Piece> temp = move(m_board[dst.x][dst.y]); 
+
 	// execute the move
 	executeMove(src, dst);
 
 	// check if the player caused himself check
-	if (isCheck(_whith_turn)) {
+	if (isCheck(m_whith_turn)) {
 		undoMove(src, dst);
+		m_board[dst.x][dst.y] = move(temp);
 		return ErrorCode::InvalidMoveCausesCheck;
 	}
 	
-	_whith_turn = !_whith_turn; // change the player
+	m_whith_turn = !m_whith_turn; // change the player
 
 	// check if the opponent is in check
-	if (isCheck(_whith_turn)) {
+	if (isCheck(m_whith_turn)) {
 		return OpponentInCheck;
 	}
 
 	// Update king position if the king was moved
 	if (typeid(*m_board[dst.x][dst.y]) == typeid(King))
-		setKingPos({ dst.x, dst.y }, m_board[dst.x][dst.y]->getColor());
+		setKingPos(dst, m_board[dst.x][dst.y]->getColor());
 
 	return ValidMove;
 }
@@ -80,15 +83,14 @@ bool Board::isOccupiedBySameColor(const Pos& pos) const
 {
 	if (isEmpty(pos))
 		return false;
-	return m_board[pos.x][pos.y]->getColor() == _whith_turn; 
+	return m_board[pos.x][pos.y]->getColor() == m_whith_turn; 
 }
 
 
 // Check if the move is legal
 bool Board::isLegalMove(const Pos& src, const Pos& dst) const
 {
-	board_vec_const_ref board = m_board;
-	return m_board[src.x][src.y]->isValidMove(src, dst, board);
+	return m_board[src.x][src.y]->isValidMove(src, dst, m_board);
 }
 
 
@@ -104,14 +106,14 @@ void Board::executeMove(const Pos& src, const Pos& dst)
 // Check if the player caused himself check
 bool Board::isCheck(const bool& color) const
 {
-	board_vec_const_ref board = m_board;
-	Pos kingPos = color ? _w_king_pos : _b_king_pos;
+	// Get the king position
+	Pos kingPos = color ? m_w_king_pos : m_b_king_pos;
 
 	// Check if any of the opponent's pieces can attack the king
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
 			if (m_board[i][j] != nullptr && m_board[i][j]->getColor() != color) {
-				if (m_board[i][j]->isValidMove(Pos(i, j), kingPos, board)) {
+				if (m_board[i][j]->isValidMove(Pos(i, j), kingPos, m_board)) {
 					return true;
 				}
 			}

@@ -1,18 +1,18 @@
-#include "../include/Pieces/Knight.h"
+#include "Pieces/Knight.h"
 
 
-bool Knight::m_registerItWhite = Factory<Piece>::registerit('N', []() -> std::unique_ptr<Piece> {
+bool Knight::m_registerItWhite = Factory<Piece>::registerit('N', []() -> unique_ptr<Piece> {
     return make_unique<Knight>(true);
     });
 
 
-bool Knight::m_registerItBlack = Factory<Piece>::registerit('n', []() -> std::unique_ptr<Piece> {
+bool Knight::m_registerItBlack = Factory<Piece>::registerit('n', []() -> unique_ptr<Piece> {
     return make_unique<Knight>(false);
     });
 
 
 
-bool Knight::isValidMove(const Pos& src, const Pos& dst, board_vec_const_ref board) {
+bool Knight::isValidMove(const Pos& src, const Pos& dst, const board_vec_t& board) {
     // Check if the move is valid for a knight
     int deltaRow = abs(dst.x - src.x);
     int deltaCol = abs(dst.y - src.y);

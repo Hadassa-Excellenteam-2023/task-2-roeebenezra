@@ -1,18 +1,18 @@
-#include "../include/Pieces/Rook.h"
+#include "Pieces/Rook.h"
 
 
-bool Rook::m_registerItWhite = Factory<Piece>::registerit('R', []() -> std::unique_ptr<Piece> {
+bool Rook::m_registerItWhite = Factory<Piece>::registerit('R', []() -> unique_ptr<Piece> {
     return make_unique<Rook>(true);
     });
 
 
-bool Rook::m_registerItBlack = Factory<Piece>::registerit('r', []() -> std::unique_ptr<Piece> {
+bool Rook::m_registerItBlack = Factory<Piece>::registerit('r', []() -> unique_ptr<Piece> {
     return make_unique<Rook>(false);
     });
 
 
 
-bool Rook::isValidMove(const Pos& src, const Pos& dst, board_vec_const_ref board) {
+bool Rook::isValidMove(const Pos& src, const Pos& dst, const board_vec_t& board) {
     // Check if the move is horizontal or vertical
     if (src.x != dst.x && src.y != dst.y) {
         return false;

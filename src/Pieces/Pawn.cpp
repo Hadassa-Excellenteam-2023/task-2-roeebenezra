@@ -1,18 +1,18 @@
-#include "../include/Pieces/Pawn.h"
+#include "Pieces/Pawn.h"
 
 
-bool Pawn::m_registerItWhite = Factory<Piece>::registerit('P', []() -> std::unique_ptr<Piece> {
+bool Pawn::m_registerItWhite = Factory<Piece>::registerit('P', []() -> unique_ptr<Piece> {
     return make_unique<Pawn>(true);
     });
 
 
-bool Pawn::m_registerItBlack = Factory<Piece>::registerit('p', []() -> std::unique_ptr<Piece> {
+bool Pawn::m_registerItBlack = Factory<Piece>::registerit('p', []() -> unique_ptr<Piece> {
     return make_unique<Pawn>(false);
     });
 
 
 
-bool Pawn::isValidMove(const Pos& src, const Pos& dst, board_vec_const_ref board) {
+bool Pawn::isValidMove(const Pos& src, const Pos& dst, const board_vec_t& board) {
     // Check if the move is one or two steps forward
     int deltaRow = this->getColor() ? (dst.x - src.x) : (src.x - dst.x);
     int deltaCol = abs(dst.y - src.y);
